@@ -1,12 +1,5 @@
 FROM nginx:alpine
+RUN apk add --no-cache openssl
 COPY dist /usr/share/nginx/html
-RUN echo 'server { \
-    listen $PORT default_server; \
-    server_name _; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    location / { \
-        try_files $uri $uri/ /index.html; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
-CMD sh -c "sed -i 's/\$PORT/'\"$PORT\"'/g' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+CMD sh -c "sed -i 's/\$PORT/'\"${PORT:-80}\"'/g' /etc/nginx/conf.d/default.conf.template && cp /etc/nginx/conf.d/default.conf.template /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
