@@ -142,7 +142,7 @@ This will alert the nearest police station with your location. Use only in genui
 
 <div class="notice">
   <strong>Important / ಮುಖ್ಯ ಸೂಚನೆ:</strong> Keep this reference number safe. Use it to track your complaint status at 
-  <strong>surakshakarnataka.gov.in/track</strong> or scan the QR code below. 
+  <strong>Track at the website or scan the QR code below. 
   This is a computer-generated acknowledgement and does not require a signature.
   <br><br>
   <strong>ಈ ಉಲ್ಲೇಖ ಸಂಖ್ಯೆಯನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಇರಿಸಿ.</strong>
@@ -157,7 +157,7 @@ This will alert the nearest police station with your location. Use only in genui
     <p><strong>Karnataka State Police</strong> · CCTNS Portal</p>
     <p>This document is valid for official use as complaint acknowledgement.</p>
     <p>For queries: Visit your nearest police station or call 100</p>
-    <p style="margin-top:6px;color:#A8362A;font-weight:bold;">Track at: surakshakarnataka.gov.in/track?ref=${n.refNumber}</p>
+    <p style="margin-top:6px;color:#A8362A;font-weight:bold;">Track at: https://surprising-happiness-production-7992.up.railway.app/track?ref=${n.refNumber}</p>
   </div>
   <div style="width:80px;height:80px;" id="qr-container"></div>
   <p style="font-size:7px;color:#888;text-align:center;margin-top:2px;">Scan to track</p>
@@ -168,7 +168,7 @@ This will alert the nearest police station with your location. Use only in genui
 window.onload = function() {
   try {
     new QRCode(document.getElementById("qr-container"), {
-      text: window.location.protocol + "//" + window.location.hostname + ":3000/track?ref=" + ack.refNumber,
+      text: window.location.origin + "/track?ref=" + ack.refNumber,
       width: 80, height: 80,
       colorDark: "#081428", colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
