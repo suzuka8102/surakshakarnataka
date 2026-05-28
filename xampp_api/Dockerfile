@@ -1,25 +1,14 @@
-FROM php:8.2-apache
+FROM ubuntu:22.04
 
-# Install PDO MySQL extension
-RUN docker-php-ext-install pdo pdo_mysql
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+RUN apt-get update && apt-get install -y \
+    php8.1 \
+    php8.1-mysql \
+    php8.1-cli \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy files
+WORKDIR /app
 COPY . .
 
-# Fix permissions
-RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
-
-# Configure Apache to use PORT env variable
-RUN echo '#!/bin/bash\n\
-export APACHE_PORT=${PORT:-80}\n\
-sed -i "s/Listen 80/Listen $APACHE_PORT/" /etc/apache2/ports.conf\n\
-sed -i "s/<VirtualHost \*:80>/<VirtualHost *:$APACHE_PORT>/" /etc/apache2/sites-enabled/000-default.conf\n\
-exec apache2-foreground' > /start.sh && chmod +x /start.sh
-
-CMD ["/start.sh"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t /app /app/router.php"]
