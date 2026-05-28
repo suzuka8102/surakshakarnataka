@@ -223,10 +223,13 @@ function FIRForm({ lang, onSubmit }: { lang: string; onSubmit: (data: Record<str
                   onClick={() => {
                     const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
                     if (!SpeechRecognition) { alert('Voice input not supported in this browser. Use Chrome.'); return; }
-                    const recognition = new (SpeechRecognition as new() => {lang:string;onresult:(e:SpeechRecognitionEvent)=>void;onerror:()=>void;start:()=>void})();
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const recognition = new (SpeechRecognition as any)();
                     recognition.lang = 'kn-IN';
-                    recognition.onresult = (e: SpeechRecognitionEvent) => {
-                      const transcript = Array.from(e.results).map((r: SpeechRecognitionResult) => r[0].transcript).join('');
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    recognition.onresult = (e: any) => {
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join('');
                       set('incident_description', form.incident_description + ' ' + transcript);
                     };
                     recognition.onerror = () => { recognition.lang = 'en-IN'; recognition.start(); };
@@ -849,7 +852,7 @@ export default function FileFIR() {
     // Add crime category for cyber
     // Get current user for attribution
     const { user: currentUser } = (await import('@/store/authStore')).useAuthStore.getState();
-    const payload = { ...data, created_by: currentUser?.user_id || currentUser?.email || 'citizen' };
+    const payload: Record<string, unknown> = { ...data, created_by: currentUser?.user_id || currentUser?.email || 'citizen' };
     if (activeType === 'cyber') {
       payload.crime_category = 'Cyber Crime';
       payload.sub_category = data.cyber_type || 'Other Cyber Crime';
@@ -900,7 +903,7 @@ export default function FileFIR() {
         // Check for duplicate warning
         if (json.data?.warning === 'POSSIBLE_DUPLICATE') {
           const proceed = window.confirm(`⚠ Possible Duplicate Detected!\n\nA similar FIR already exists: ${json.data.existing_fir}\n\nDo you still want to file a new complaint?`);
-          if (!proceed) { setLoading(false); return; }
+          if (!proceed) { return; }
           // User confirmed - proceed with local ref
           finalRef = localRef;
           savedToDb = false;
