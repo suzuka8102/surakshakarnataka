@@ -168,7 +168,7 @@ This will alert the nearest police station with your location. Use only in genui
 window.onload = function() {
   try {
     new QRCode(document.getElementById("qr-container"), {
-      text: "https://surprising-happiness-production-7992.up.railway.app/track?ref=" + ack.refNumber,
+      text: window.location.origin + "/track?ref=" + ack.refNumber,
       width: 80, height: 80,
       colorDark: "#081428", colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
