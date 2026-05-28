@@ -163,7 +163,7 @@ This will alert the nearest police station with your location. Use only in genui
   <p style="font-size:7px;color:#888;text-align:center;margin-top:2px;">Scan to track</p>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+<script>setTimeout(function(){var img=document.createElement("img");img.src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data="+encodeURIComponent("https://surprising-happiness-production-7992.up.railway.app/track?ref=${n.refNumber}");img.width=80;img.height=80;var c=document.getElementById("qr-container");if(c){c.innerHTML="";c.appendChild(img);}},500);<\/script>
 <script>
 window.onload = function() {
   try {
