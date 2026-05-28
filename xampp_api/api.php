@@ -1,8 +1,7 @@
 <?php
-// ═══════════════════════════════════════════════════════════════════
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 // SurakshaKarnataka — Complete PHP API
-// Every table: READ + WRITE + STATUS UPDATE
-// ═══════════════════════════════════════════════════════════════════
 require_once __DIR__ . '/config.php';
 
 $action = $_GET['action'] ?? '';
