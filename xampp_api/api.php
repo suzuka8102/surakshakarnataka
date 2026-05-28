@@ -221,9 +221,9 @@ case 'register_fir':
     $firNumber = "KAR/$year/$distCode/$unitCode/" . str_pad($count, 6, '0', STR_PAD_LEFT);
     $firId = 'FIR_' . uniqid();
 
-    // Duplicate FIR check - same phone + same date + same area
-    $dupCheck = $db->prepare("SELECT fir_number FROM firs WHERE complainant_phone = ? AND incident_date = ? AND incident_place LIKE ? AND status != 'Closed' LIMIT 1");
-    $dupCheck->execute([$body['complainant_phone'], $body['incident_date'], '%' . substr($body['incident_place'], 0, 20) . '%']);
+    // Duplicate FIR check - same phone + same date + same exact place
+    $dupCheck = $db->prepare("SELECT fir_number FROM firs WHERE complainant_phone = ? AND incident_date = ? AND incident_place = ? AND status != 'Closed' LIMIT 1");
+    $dupCheck->execute([$body['complainant_phone'], $body['incident_date'], $body['incident_place']]);
     $duplicate = $dupCheck->fetch();
     if ($duplicate) {
         jsonOk(['warning' => 'POSSIBLE_DUPLICATE', 'existing_fir' => $duplicate['fir_number'], 'message' => 'A similar FIR already exists for this complainant on the same date and location. Ref: ' . $duplicate['fir_number']]);
